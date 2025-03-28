@@ -26,10 +26,9 @@ def create_order(firstname, lastname, address, metrostation, phone, renttime, de
     json_string = json.dumps(body)
 
     response = ApiMethods.create_order(json_string)
-    print (response.status_code)
-    print(response.text)
+
     yield response
     if response.status_code == 201:
         r = response.json()["track"]
         response_1 = ApiMethods.cancel_order(r)
-        print(response_1.text)
+
