@@ -29,16 +29,16 @@ class TestGetOrderList:
         }
         response = ApiMethods.login_courier(body)
         cls.courier_id =response.json()["id"]
-
+        data_list = Data.data_for_create_order[1]
         body = {
-            "firstName": 'Иван',
-            "lastName": 'Иванов',
-            "address": 'Бульвар Молодежи',
-            "metroStation": 'Павелецкая',
-            "phone": '89999999999',
-            "rentTime": 2,
-            "deliveryDate": '2025-04-01',
-            "comment": 'срочно',
+            "firstName": data_list[0],
+            "lastName": data_list[1],
+            "address": data_list[2],
+            "metroStation": data_list[3],
+            "phone": data_list[4],
+            "rentTime": data_list[5],
+            "deliveryDate": data_list[6],
+            "comment": data_list[7],
             "color": []
 
         }
