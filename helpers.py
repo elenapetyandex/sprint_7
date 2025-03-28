@@ -3,6 +3,8 @@ import random
 
 import requests
 
+import urls
+
 
 class Helpers:
 
@@ -36,7 +38,7 @@ class Helpers:
         }
 
         # отправляем запрос на регистрацию курьера и сохраняем ответ в переменную response
-        response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier', data=payload)
+        response = requests.post(urls.create_courier_url, data=payload)
 
         # если регистрация прошла успешно (код ответа 201), добавляем в список логин и пароль курьера
         if response.status_code == 201:
