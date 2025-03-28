@@ -7,6 +7,7 @@ import urls
 
 from api_methods import ApiMethods
 from data import Data
+from helpers import Helpers
 
 
 class TestCourierCreate:
@@ -17,9 +18,9 @@ class TestCourierCreate:
     @classmethod
     def setup_class(cls):
 
-        cls.login = Data.generate_string()
-        cls.password = Data.generate_string()
-        cls.firstname = Data.generate_string()
+        cls.login = Helpers.generate_random_string(10)
+        cls.password = Helpers.generate_random_string(10)
+        cls.firstname = Helpers.generate_random_string(10)
 
     @allure.title('Проверка получения статус кода 201 и тела ответа  методом POST для "api/v1/courier" при корректном заполнении всех обязательных полей.')
     def test_create_courier(self):
@@ -30,7 +31,7 @@ class TestCourierCreate:
         }
 
         response = ApiMethods.create_courier(payload)
-        assert response.status_code == 201 and response.text == '{"ok":true}'
+        assert response.status_code == 201 and response.text == Data.text_message_for_successful_create_courier
 
     @allure.title('Проверка получения статус кода 400   методом POST для "api/v1/courier" при незаполненном поле логин.')
     def test_create_courier_by_empty_login(self):
@@ -41,7 +42,7 @@ class TestCourierCreate:
         }
         response = ApiMethods.create_courier(payload)
 
-        assert response.status_code == 400 and response.text == '{"message": "Недостаточно данных для создания учетной записи"}'
+        assert response.status_code == 400 and response.text == Data.text_message_for_create_courier_without_data_needed
 
     @allure.title('Проверка получения статус кода 400  методом POST для "api/v1/courier" при незаполненном поле пароль.')
     def test_create_courier_by_empty_password(self):
@@ -52,14 +53,14 @@ class TestCourierCreate:
         }
         response = ApiMethods.create_courier(payload)
 
-        assert response.status_code == 400 and response.text == '{"message": "Недостаточно данных для создания учетной записи"}'
+        assert response.status_code == 400 and response.text == Data.text_message_for_create_courier_without_data_needed
 
     @allure.title('Проверка получения статус кода 400  методом POST для "api/v1/courier" при пустом теле запроса.')
     def test_create_courier_by_empty_body_of_request_return_400_bad_request(self):
         payload = {}
         response = ApiMethods.create_courier(payload)
 
-        assert response.status_code == 400 and response.text == '{"message": "Недостаточно данных для создания учетной записи"}'
+        assert response.status_code == 400 and response.text == Data.text_message_for_create_courier_without_data_needed
 
     @allure.title('Проверка получения статус кода 409  методом POST для "api/v1/courier" при повторяющемся логине.')
     def test_create_courier_the_same_login_twice_return_409_status_code_and_message(self):
@@ -70,7 +71,7 @@ class TestCourierCreate:
         }
         ApiMethods.create_courier(payload)
         response = ApiMethods.create_courier(payload)
-        assert response.status_code == 409 and response.text == '{"message": "Этот логин уже используется"}'
+        assert response.status_code == 409 and response.text == Data.text_message_for_create_courier_login_busy
 
     @classmethod
     def teardown_class(cls):

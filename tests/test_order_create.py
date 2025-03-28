@@ -1,7 +1,6 @@
 import allure
 import pytest
 
-from api_methods import ApiMethods
 from data import Data
 
 

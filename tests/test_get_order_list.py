@@ -7,6 +7,7 @@ import requests
 import urls
 from api_methods import ApiMethods
 from data import Data
+from helpers import Helpers
 
 
 class TestGetOrderList:
@@ -18,7 +19,7 @@ class TestGetOrderList:
 
     @classmethod
     def setup_class(cls):
-        login_pass = Data.register_new_courier_and_return_login_password()
+        login_pass = Helpers.register_new_courier_and_return_login_password()
         cls.login = login_pass[0]
         cls.password = login_pass[1]
         cls.firstname = login_pass[2]
@@ -66,7 +67,7 @@ class TestGetOrderList:
         courier_id = 100000000
         response = ApiMethods.get_order_list(courier_id, neareststation, limit, page)
 
-        assert response.status_code == 200 and response.text == '{"message": "Курьер с идентификатором {courierId} не найден"}'
+        assert response.status_code == 200 and response.text == Data.message_for_get_order_list_courier_not_found
 
 
     @classmethod

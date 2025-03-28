@@ -8,6 +8,7 @@ from api_methods import ApiMethods
 import requests
 
 from data import Data
+from helpers import Helpers
 
 
 class TestCourierLogin:
@@ -18,7 +19,7 @@ class TestCourierLogin:
 
     @classmethod
     def setup_class(cls):
-        login_pass = Data.register_new_courier_and_return_login_password()
+        login_pass = Helpers.register_new_courier_and_return_login_password()
         cls.login =login_pass[0]
         cls.password = login_pass[1]
         cls.firstname = login_pass[2]
@@ -42,7 +43,7 @@ class TestCourierLogin:
         }
 
         response = ApiMethods.login_courier(body)
-        assert response.status_code == 400 and response.text == '{"message": "Недостаточно данных для входа"}'
+        assert response.status_code == 400 and response.text == Data.message_for_courier_login_without_data_needed
 
     @allure.title('Проверка получения статус кода 400 методом POST для "/api/v1/courier/login" при корректном заполнении поля пароль и пустом поле логин.')
     @pytest.mark.parametrize('login', [""])
@@ -54,7 +55,7 @@ class TestCourierLogin:
 
         response = ApiMethods.login_courier(body)
 
-        assert response.status_code == 400 and response.text == '{"message": "Недостаточно данных для входа"}'
+        assert response.status_code == 400 and response.text == Data.message_for_courier_login_without_data_needed
 
     @allure.title('Проверка получения статус кода 400 методом POST для "/api/v1/courier/login" при пустом теле запроса.')
     def test_login_created_courier_with_not_full_body_return_status_code_400(self):
@@ -65,12 +66,12 @@ class TestCourierLogin:
     @allure.title('Проверка получения статус кода 404 методом POST для "/api/v1/courier/login" при заполнении логина и пароля несозданного курьера')
     def test_login_not_created_courier_return_404_status_code(self):
         body = {
-            "login": Data.generate_string(),
-            "password": Data.generate_string()
+            "login": Helpers.generate_random_string(10),
+            "password": Helpers.generate_random_string(10)
         }
         response = ApiMethods.login_courier(body)
 
-        assert response.status_code == 404 and response.text == '{"message": "Учетная запись не найдена"}'
+        assert response.status_code == 404 and response.text == Data.message_for_courier_login_not_found
 
 
     @classmethod
